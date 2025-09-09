@@ -34,7 +34,7 @@
     });
 
     // 2. YOUR AUCKLAND TRANSPORT API KEY (PLACEHOLDER)
-    const atApiKey = ‘https://api.at.govt.nz/realtime/legacy/[?callback][&tripid][&vehicleid]';
+    const atApiKey = ‘678049ee0ed8434d8133d7e91a486287';
 
     // 3. DEFINE THE BUS ROUTES AND THEIR COLORS HERE
     // Use the official route names as the key. The value can be a color name or a hex code.
