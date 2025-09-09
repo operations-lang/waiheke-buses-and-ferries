@@ -23,21 +23,21 @@
 <div id='map'></div>
 
 <script>
-    // 1. Replace with your Mapbox Public Access Token
-    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+    // 1. YOUR MAPBOX PUBLIC ACCESS TOKEN (PROVIDED)
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXJpZGV3YWloZWtlIiwiYSI6ImNtZmJ5andpYjFmaTQya29pNzI5aXJieHEifQ.i41Fp5KnH3VetB36UsbcxQ';
 
     const map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11', // You can choose a different map style
+        style: 'mapbox://styles/mapbox/streets-v11',
         center: [174.7645, -36.8485], // Auckland CBD
         zoom: 12
     });
 
-    // 2. Replace with your Auckland Transport API Key
+    // 2. YOUR AUCKLAND TRANSPORT API KEY (PLACEHOLDER - GET THIS FROM THE AT DEVELOPER PORTAL)
     const atApiKey = 'YOUR_AT_API_KEY';
 
-    // 3. Enter the bus routes you want to track
-    const desiredRoutes = ['YOUR_BUS_ROUTES']; // e.g., ['110', '129', '132']
+    // 3. ENTER THE BUS ROUTES YOU WANT TO TRACK (E.G., ['110', '129', '132'])
+    const desiredRoutes = ['YOUR_BUS_ROUTES'];
     const markers = {}; // To store the Mapbox markers
 
     async function getBusLocations() {
@@ -65,7 +65,6 @@
             });
 
             vehicles.forEach(vehicle => {
-                const tripId = vehicle.vehicle.trip.trip_id;
                 const routeId = vehicle.vehicle.trip.route_id;
                 const position = vehicle.vehicle.position;
                 
@@ -81,7 +80,7 @@
                         
                         markers[vehicle.id] = new mapboxgl.Marker(el)
                             .setLngLat([position.longitude, position.latitude])
-                            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                            .setPopup(new mapboxgl.Popup({ offset: 25 })
                             .setHTML(`<h3>Bus Route: ${routeId}</h3><p>Vehicle ID: ${vehicle.id}</p>`))
                             .addTo(map);
                     }
@@ -96,7 +95,6 @@
     // Call the function initially
     map.on('load', () => {
         getBusLocations();
-
         // Refresh the data every 30 seconds
         setInterval(getBusLocations, 30000);
     });
