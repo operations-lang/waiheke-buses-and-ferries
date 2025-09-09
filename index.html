@@ -79,6 +79,7 @@
 
             vehicles.forEach(vehicle => {
                 const routeId = vehicle.vehicle.trip.route_id;
+                console.log(`API returned Route ID: ${routeId}`);
                 const position = vehicle.vehicle.position;
                 
                 // Only process the desired routes
