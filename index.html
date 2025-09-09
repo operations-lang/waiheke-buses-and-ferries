@@ -53,12 +53,10 @@
         return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
     }
 
-    async function getBusLocations() {
-        try {
-            const response = await fetch(`https://api.at.govt.nz/realtime/legacy/combinedfeed`, {
-                    'Ocp-Apim-Subscription-Key': atApiKey
-                }
-            });
+    function getBusIcon(color) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="${color}" d="M495.82 232.09c0-11.75-9.52-21.27-21.27-21.27h-22.3v-58.42c0-30.82-25.04-55.85-55.85-55.85H102.34c-30.82 0-55.85 25.04-55.85 55.85v157.65c0 30.82 25.04 55.85 55.85 55.85H297.8c12.18-12.28 29.83-19.96 49.03-19.96s36.85 7.68 49.03 19.96h76.35c11.75 0 21.27-9.52 21.27-21.27V232.09zm-380.98-35.15c-19.16 0-34.73-15.57-34.73-34.73s15.57-34.73 34.73-34.73 34.73 15.57 34.73 34.73-15.57 34.73-34.73 34.73zm256.78 35.15H176.43v-58.42h183.18v58.42zm40.35 125.79c-19.16 0-34.73-15.57-34.73-34.73s15.57-34.73 34.73-34.73 34.73 15.57 34.73 34.73-15.57 34.73-34.73 34.73z"/></svg>`;
+        return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    }
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
