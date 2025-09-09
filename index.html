@@ -55,8 +55,7 @@
 
     async function getBusLocations() {
         try {
-            const response = await fetch(`https://api.at.govt.nz/realtime/legacy/combinedfeed`, {const response = await fetch(`https://api.at.govt.nz/realtime/legacy/vehiclepositions`, {
-                headers: {
+            const response = await fetch(`https://api.at.govt.nz/realtime/legacy/combinedfeed`, {
                     'Ocp-Apim-Subscription-Key': atApiKey
                 }
             });
