@@ -9,12 +9,12 @@
     <style>
         body { margin: 0; padding: 0; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        /* This is the base style for all bus markers */
         .bus-marker {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23FF5722" stroke="%23FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bus"><rect x="1" y="5" width="22" height="14" rx="2" ry="2"></rect><path d="M7 19v-2"></path><path d="M17 19v-2"></path><path d="M5 19v-2"></path><path d="M19 19v-2"></path><path d="M10 5l3 14"></path><path d="M2 12h20"></path></svg>');
-            background-size: cover;
             width: 24px;
             height: 24px;
             cursor: pointer;
+            /* We will set the background-image dynamically in JavaScript */
         }
     </style>
 </head>
@@ -33,12 +33,27 @@
         zoom: 12
     });
 
-    // 2. YOUR AUCKLAND TRANSPORT API KEY (PLACEHOLDER - GET THIS FROM THE AT DEVELOPER PORTAL)
-    const atApiKey = 'YOUR_AT_API_KEY';
+    // 2. YOUR AUCKLAND TRANSPORT API KEY (PLACEHOLDER)
+    const atApiKey = 'https://api.at.govt.nz/realtime/legacy/[?callback][&tripid][&vehicleid]';
 
-    // 3. ENTER THE BUS ROUTES YOU WANT TO TRACK (E.G., ['110', '129', '132'])
-    const desiredRoutes = ['YOUR_BUS_ROUTES'];
-    const markers = {}; // To store the Mapbox markers
+    // 3. DEFINE THE BUS ROUTES AND THEIR COLORS HERE
+    // Use the official route names as the key. The value can be a color name or a hex code.
+    const routeColors = {
+        '50A': 'blue',    // Or '#0000FF'
+        '50B': 'green',   // Or '#008000'
+        '501': 'yellow',  // Or '#FFFF00'
+        '502': 'red'      // Or '#FF0000'
+    };
+
+    // This array will hold the routes we want to track, derived from the keys of the routeColors object.
+    const desiredRoutes = Object.keys(routeColors);
+    const markers = {};
+
+    function getBusIcon(color) {
+        // We use a simple SVG icon for the bus that can be colored dynamically
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${color}" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bus"><rect x="1" y="5" width="22" height="14" rx="2" ry="2"></rect><path d="M7 19v-2"></path><path d="M17 19v-2"></path><path d="M5 19v-2"></path><path d="M19 19v-2"></path><path d="M10 5l3 14"></path><path d="M2 12h20"></path></svg>`;
+        return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    }
 
     async function getBusLocations() {
         try {
@@ -70,6 +85,8 @@
                 
                 // Only process the desired routes
                 if (desiredRoutes.includes(routeId)) {
+                    const color = routeColors[routeId] || 'black'; // Default to black if no color is defined
+                    
                     if (markers[vehicle.id]) {
                         // Update existing marker's position
                         markers[vehicle.id].setLngLat([position.longitude, position.latitude]);
@@ -77,6 +94,7 @@
                         // Create a new marker
                         const el = document.createElement('div');
                         el.className = 'bus-marker';
+                        el.style.backgroundImage = `url('${getBusIcon(color)}')`;
                         
                         markers[vehicle.id] = new mapboxgl.Marker(el)
                             .setLngLat([position.longitude, position.latitude])
